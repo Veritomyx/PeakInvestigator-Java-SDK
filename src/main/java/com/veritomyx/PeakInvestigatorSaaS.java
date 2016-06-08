@@ -110,6 +110,7 @@ public class PeakInvestigatorSaaS
 	 * @param server
 	 *            The server address represented as a String.
 	 * @throws JSchException
+	 *             Host file is not found.
 	 */
 	public PeakInvestigatorSaaS(String server) throws JSchException {
 		// without this we get exception in getInputStream
@@ -131,6 +132,7 @@ public class PeakInvestigatorSaaS
 	 * 
 	 * @param timeout
 	 *            The desired timeout in milliseconds.
+	 * @return This object after the timeout has been modified.
 	 */
 	public PeakInvestigatorSaaS withTimeout(int timeout) {
 		this.timeout = timeout;
@@ -141,6 +143,7 @@ public class PeakInvestigatorSaaS
 	 * Sets the known hosts for SSH sessions.
 	 * 
 	 * @throws JSchException
+	 *             Hosts file is not found.
 	 */
 	protected void setupKnownHosts() throws JSchException {
 		InputStream stream = getClass().getResourceAsStream(
@@ -160,6 +163,7 @@ public class PeakInvestigatorSaaS
 	 *            The URL of the desired connection.
 	 * @return A new HttpURLConnection instance
 	 * @throws IOException
+	 *             If an I/O exception is thrown when opening HTTPS connection
 	 */
 	private HttpURLConnection buildConnection(URL url) throws IOException {
 
@@ -188,6 +192,7 @@ public class PeakInvestigatorSaaS
 	 *            The desired query string
 	 * @return The response for the query.
 	 * @throws IOException
+	 *             If an I/O exception occurs from the HTTP connection
 	 */
 	protected String queryConnection(HttpURLConnection connection, String query)
 			throws IOException {
@@ -222,6 +227,9 @@ public class PeakInvestigatorSaaS
 	 *            An instance of one of the subclasses of BaseAction that
 	 *            represent the API methods. It must be properly initialized.
 	 * @return The JSON response from the PeakInvestigator service.
+	 * @throws IOException
+	 *             An I/O exception is thrown if there is a problem in the HTTP
+	 *             connection.
 	 */
 	public String executeAction(BaseAction action) throws IOException {
 		action.reset();
@@ -263,6 +271,8 @@ public class PeakInvestigatorSaaS
 	 * @param port
 	 *            Self-explanatory.
 	 * @throws JSchException
+	 *             A JSchException is thrown if problem connecting to SFTP
+	 *             server.
 	 */
 	protected void initializeSftpSession(String server, String username,
 			String password, int port) throws JSchException {
@@ -319,7 +329,9 @@ public class PeakInvestigatorSaaS
 	 * @param monitor
 	 *            An object implementing the SftpProgressMonitor interface.
 	 * @throws JSchException
+	 *             Thrown if problem connecting to SFTP server.
 	 * @throws SftpException
+	 *             Thrown if problem during SFTP transfer.
 	 */
 	public void putFile(SftpAction action, String localFilename,
 			String remoteFilename, SftpProgressMonitor monitor)
@@ -359,7 +371,9 @@ public class PeakInvestigatorSaaS
 	 * @param monitor
 	 *            An object implementing the SftpProgressMonitor interface.
 	 * @throws JSchException
+	 *             Thrown if problem connecting to SFTP server.
 	 * @throws SftpException
+	 *             Thrown if problem during SFTP transfer.
 	 */
 	public void getFile(SftpAction action, String remoteFilename,
 			String localFilename, SftpProgressMonitor monitor)

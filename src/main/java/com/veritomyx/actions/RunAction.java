@@ -11,15 +11,23 @@ public class RunAction extends BaseAction {
 	private String calibrationFilename;
 
 
-	/** Create object for RUN API call.
+	/**
+	 * Create object for RUN API call.
 	 * 
 	 * @param versionOfApi
+	 *            The version of the PeakInvestigator API being used.
 	 * @param user
+	 *            The username for the Veritomyx account.
 	 * @param code
+	 *            The password for the Veritomyx account.
 	 * @param job
+	 *            The job (from INIT) to run.
 	 * @param RTO
+	 *            The desired "Response Time Objective".
 	 * @param inputFilename
+	 *            The filename of the input "production" scans.
 	 * @param calibrationFilename
+	 *            The filename of the input "calibration" scans.
 	 */
 	public RunAction(String versionOfApi, String user, String code, String job, String RTO,
 			String inputFilename, String calibrationFilename) {

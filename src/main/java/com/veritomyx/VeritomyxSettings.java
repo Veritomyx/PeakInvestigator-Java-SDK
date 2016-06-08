@@ -5,13 +5,13 @@ package com.veritomyx;
  * products:
  * 
  * <ul>
- * <li>Server address
- * <li>Username
- * <li>Password
- * <li>Project number
- * <ul>
+ * <li>Server address</li>
+ * <li>Username</li>
+ * <li>Password</li>
+ * <li>Project number</li>
+ * </ul>
  * 
- * @author adam_tenderholt
+ * @author Adam Tenderholt
  *
  */
 public class VeritomyxSettings {

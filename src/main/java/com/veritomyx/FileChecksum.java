@@ -49,7 +49,10 @@ public class FileChecksum
 
 	/**
 	 * @param filename
-	 * @throws NoSuchAlgorithmException 
+	 *            The filename of the file that should be have a checksum
+	 *            calculated or verified.
+	 * @throws NoSuchAlgorithmException
+	 *             If the checksum algorithm (SHA-1) is not available.
 	 */
 	public FileChecksum(String filename) throws NoSuchAlgorithmException
 	{
@@ -60,7 +63,9 @@ public class FileChecksum
 
 	/**
 	 * @param file
-	 * @throws NoSuchAlgorithmException 
+	 *            The file that should have a checksum calculated or verified.
+	 * @throws NoSuchAlgorithmException
+	 *             If the checksum algorithm (SHA-1) is not available.
 	 */
 	public FileChecksum(File file) throws NoSuchAlgorithmException 
 	{
@@ -71,7 +76,9 @@ public class FileChecksum
 
 	/**
 	 * Reset the hash values to those of a new instance.
-	 * @throws NoSuchAlgorithmException 
+	 * 
+	 * @throws NoSuchAlgorithmException
+	 *             If the checksum algorithm (SHA-1) is not available.
 	 */
 	public void reset() throws NoSuchAlgorithmException
 	{
@@ -86,7 +93,8 @@ public class FileChecksum
 	 * Add a new line to the cumulative checksum hash.
 	 * 
 	 * @param line
-	 * @return String		// returns input unmodified line
+	 *            Text to have an intermediate checksum calculated.
+	 * @return String The unmodified line
 	 */
 	public String hash_line(String line)
 	{
@@ -105,8 +113,11 @@ public class FileChecksum
 	 * hash (hash_line()) will be lost.
 	 * 
 	 * @throws NoSuchAlgorithmException
+	 *             If the checksum algorithm (SHA-1) is not available.
 	 * @throws FileNotFoundException
+	 *             If the associated file is not found.
 	 * @throws IOException
+	 *             A problem reading/writing the file has occurred.
 	 */
 	public void hash_file() throws NoSuchAlgorithmException, FileNotFoundException, IOException
 	{
@@ -132,7 +143,7 @@ public class FileChecksum
 	/**
 	 * Return list of strings from file
 	 * 
-	 * @return
+	 * @return List of lines from the file.
 	 */
 	public List<String> getFileStrings()
 	{
@@ -142,7 +153,7 @@ public class FileChecksum
 	/**
 	 * Return the checksum string
 	 * 
-	 * @return
+	 * @return The checksum of all lines.
 	 */
 	public String checksum_line()
 	{
@@ -150,14 +161,18 @@ public class FileChecksum
 	}
 
 	/**
-	 * Append the computed hash to the text file as a single comment line at the end of the file.
-	 * The data should all have been pre-written to the file.
+	 * Append the computed hash to the text file as a single comment line at the
+	 * end of the file. The data should all have been pre-written to the file.
 	 * 
 	 * @param validate
-	 * @return
+	 *            Whether the file should be validated or not.
+	 * @return Boolean inidicating a valid file.
 	 * @throws FileNotFoundException
+	 *             If the associated file is not found.
 	 * @throws IOException
-	 * @throws NoSuchAlgorithmException 
+	 *             A problem reading/writing the file has occurred.
+	 * @throws NoSuchAlgorithmException
+	 *             If the checksum algorithm (SHA-1) is not available.
 	 */
 	public boolean append_txt(boolean validate) throws FileNotFoundException, IOException, NoSuchAlgorithmException
 	{
@@ -172,14 +187,18 @@ public class FileChecksum
 	 * Append the computed hash to the XML file. The data should all have been
 	 * pre-written to the file except for the terminating tag which will be
 	 * added by this method. The checksum will be enclosed in
-	 * <chksum_tag>hash</ckksum_tag> and the file will be terminated with
-	 * </file_tag>
+	 * {@literal<chksum_tag>hash</ckksum_tag>} and the file will be terminated
+	 * with {@literal</file_tag>}.
 	 * 
 	 * @param chksum_tag
+	 *            The attribute name of a checksum tag.
 	 * @param file_tag
+	 *            The attribute name of a file tag.
 	 * @param validate
-	 * @return
+	 *            Whether the checksum should be validated.
+	 * @return Boolean indicating that the file is valid.
 	 * @throws Exception
+	 *             If there is a problem appending the checksum.
 	 */
 	public boolean append_xml(String chksum_tag, String file_tag, boolean validate) throws Exception
 	{
@@ -202,10 +221,14 @@ public class FileChecksum
 	 * computed hash (hash_line()) will be lost.
 	 * 
 	 * @param verbose
-	 * @return
-	 * @throws NoSuchAlgorithmException
+	 *            Whether debug info should be printed to std out.
+	 * @return Boolean indicating that the file is valid
 	 * @throws FileNotFoundException
+	 *             If the associated file is not found.
 	 * @throws IOException
+	 *             A problem reading/writing the file has occurred.
+	 * @throws NoSuchAlgorithmException
+	 *             If the checksum algorithm (SHA-1) is not available.
 	 */
 	public boolean verify(boolean verbose) throws NoSuchAlgorithmException, FileNotFoundException, IOException
 	{
@@ -220,10 +243,14 @@ public class FileChecksum
 	 * Open the proper type of buffered file depending on the .gz suffix
 	 * 
 	 * @param path
+	 *            A string representation of the path.
 	 * @param append
+	 *            Whether the file should be appended.
 	 * @return
 	 * @throws FileNotFoundException
+	 *             If the associated file is not found.
 	 * @throws IOException
+	 *             A problem reading/writing the file has occurred.
 	 */
 	private BufferedWriter openWriteFile(String path, boolean append) throws FileNotFoundException, IOException
 	{
@@ -239,10 +266,12 @@ public class FileChecksum
 	 * Open the proper type of buffered file depending on the .gz suffix
 	 * 
 	 * @param path
-	 * @param mode
-	 * @return
+	 *            A string representation of a file path.
+	 * @return A buffered reader for the file.
 	 * @throws FileNotFoundException
+	 *             If the associated file is not found.
 	 * @throws IOException
+	 *             A problem reading/writing the file has occurred.
 	 */
 	private BufferedReader openReadFile(String path) throws FileNotFoundException, IOException
 	{
@@ -258,7 +287,8 @@ public class FileChecksum
 	 * Convert the byte array to hex format String.
 	 * 
 	 * @param buf
-	 * @return
+	 *            A byte array
+	 * @return The byte array as a hex-formatted String.
 	 */
 	private String toHex(byte[] buf)
 	{
