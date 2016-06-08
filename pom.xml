@@ -3,6 +3,7 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.veritomyx</groupId>
+	<artifactId>peakinvestigator-sdk</artifactId>
 	<version>0.9</version>
 	<name>PeakInvestigator Java SDK</name>
 	<description>PeakInvestigator™ is advanced centroiding and deconvolution software for mass spectrometry.</description>
@@ -12,12 +13,29 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 	</properties>
+
 	<scm>
 		<url>https://github.com/Veritomyx/PeakInvestigator-Java-SDK</url>
 		<connection>scm:git:git://github.com/Veritomyx/PeakInvestigator-Java-SDK.git</connection>
 		<developerConnection>scm:git:git@github.com/Veritomyx/PeakInvestigator-Java-SDK.git</developerConnection>
 	</scm>
 
+	<licenses>
+		<license>
+			<name>BSD 3-Clause</name>
+			<url>https://opensource.org/licenses/BSD-3-Clause</url>
+		</license>
+	</licenses>
+
+	<developers>
+		<developer>
+			<name>Adam Tenderholt</name>
+			<email>adam.tenderholt@veritomyx.com</email>
+			<organization>Veritomyx</organization>
+			<organizationUrl>http://www.veritomyx.com</organizationUrl>
+		</developer>
+	</developers>
+  
 	<build>
 		<plugins>
 			<plugin>
@@ -99,6 +117,4 @@
 			<version>1.1.1</version>
 		</dependency>
 	</dependencies>
-
-	<artifactId>peakinvestigator-sdk</artifactId>
 </project>
