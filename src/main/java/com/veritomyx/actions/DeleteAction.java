@@ -8,8 +8,8 @@ public class DeleteAction extends BaseAction {
 
 	private String jobID;
 
-	public DeleteAction(String versionOfApi, String user, String code, String jobID) {
-		super(versionOfApi, user, code);
+	public DeleteAction(String user, String code, String jobID) {
+		super(user, code);
 
 		this.jobID = jobID;
 	}

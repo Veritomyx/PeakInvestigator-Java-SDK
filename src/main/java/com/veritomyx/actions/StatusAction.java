@@ -17,8 +17,8 @@ public class StatusAction extends BaseAction {
 
 	private String jobID;
 
-	public StatusAction(String versionOfApi, String user, String code, String jobID) {
-		super(versionOfApi, user, code);
+	public StatusAction(String user, String code, String jobID) {
+		super(user, code);
 
 		this.jobID = jobID;
 	}

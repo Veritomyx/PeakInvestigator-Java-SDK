@@ -14,8 +14,6 @@ public class RunAction extends BaseAction {
 	/**
 	 * Create object for RUN API call.
 	 * 
-	 * @param versionOfApi
-	 *            The version of the PeakInvestigator API being used.
 	 * @param user
 	 *            The username for the Veritomyx account.
 	 * @param code
@@ -29,9 +27,9 @@ public class RunAction extends BaseAction {
 	 * @param calibrationFilename
 	 *            The filename of the input "calibration" scans.
 	 */
-	public RunAction(String versionOfApi, String user, String code, String job, String RTO,
+	public RunAction(String user, String code, String job, String RTO,
 			String inputFilename, String calibrationFilename) {
-		super(versionOfApi, user, code);
+		super(user, code);
 
 		this.job = job;
 		this.RTO = RTO;

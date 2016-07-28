@@ -19,8 +19,9 @@ public class ActionsTest {
 
 	@Test
 	public void test_PiVersionsAction_Query() throws ResponseFormatException {
-		BaseAction action = new PiVersionsAction("3.0", "user", "password");
-		assertEquals("Version=3.0&User=user&Code=password&Action=PI_VERSIONS",
+		BaseAction action = new PiVersionsAction("user", "password");
+		assertEquals("Version=" + BaseAction.API_VERSION
+				+ "&User=user&Code=password&Action=PI_VERSIONS",
 				action.buildQuery());
 
 		action.processResponse(VERSIONS_RESPONSE_1);
@@ -33,7 +34,7 @@ public class ActionsTest {
 
 	@Test
 	public void test_PiVersionsAction_Error() throws ResponseFormatException {
-		BaseAction action = new PiVersionsAction("3.0", "user", "password");
+		BaseAction action = new PiVersionsAction("user", "password");
 
 		String response = BaseAction.ERROR_CREDENTIALS.replace("ACTION",
 				"PI_VERSIONS");
@@ -46,12 +47,15 @@ public class ActionsTest {
 
 	@Test
 	public void test_InitAction_Query() throws ResponseFormatException {
-		BaseAction action = InitAction.create("3.0", "user", "password", "SDK_test")
+		BaseAction action = InitAction.create("user", "password", "SDK_test")
 				.withMassRange(50, 100, 60, 80).usingProjectId(100)
 				.withPiVersion("1.2").withScanCount(5, 0)
 				.withNumberOfPoints(12345);
 
-		assertEquals("Version=3.0&User=user&Code=password&Action=INIT&ID=100&PI_Version=1.2&ScanCount=5&MaxPoints=12345&MinMass=50&MaxMass=100&StartMass=60&EndMass=80&CalibrationCount=0&ClientKey=SDK_test",
+		assertEquals(
+				"Version="
+						+ BaseAction.API_VERSION
+						+ "&User=user&Code=password&Action=INIT&ID=100&PI_Version=1.2&ScanCount=5&MaxPoints=12345&MinMass=50&MaxMass=100&StartMass=60&EndMass=80&CalibrationCount=0&ClientKey=SDK_test",
 				action.buildQuery());
 
 		action.processResponse(InitAction.EXAMPLE_RESPONSE_1);
@@ -85,7 +89,7 @@ public class ActionsTest {
 
 	@Test
 	public void test_InitAction_Error() throws ResponseFormatException {
-		BaseAction action = InitAction.create("3.0", "user", "password", "SDK test")
+		BaseAction action = InitAction.create("user", "password", "SDK test")
 				.withMassRange(50, 100, 60, 80).usingProjectId(100)
 				.withPiVersion("1.2").withScanCount(5, 0)
 				.withNumberOfPoints(12345);
@@ -100,9 +104,9 @@ public class ActionsTest {
 
 	@Test
 	public void test_SftpAction_Query() throws ResponseFormatException {
-		BaseAction action = new SftpAction("3.0", "user", "password", 100);
-		assertEquals(action.buildQuery(),
-				"Version=3.0&User=user&Code=password&Action=SFTP&ID=100");
+		BaseAction action = new SftpAction("user", "password", 100);
+		assertEquals(action.buildQuery(), "Version=" + BaseAction.API_VERSION
+				+ "&User=user&Code=password&Action=SFTP&ID=100");
 
 		action.processResponse(SftpAction.EXAMPLE_RESPONSE_1);
 
@@ -116,7 +120,7 @@ public class ActionsTest {
 
 	@Test
 	public void test_SftpAction_Error() throws ResponseFormatException {
-		BaseAction action = new SftpAction("3.0", "user", "password", 100);
+		BaseAction action = new SftpAction("user", "password", 100);
 		action.processResponse("{\"Action\":\"SFTP\",\"Error\":3,\"Message\":\"Invalid username or password - can not validate\",\"Location\":\"\"}");
 
 		assertEquals("Invalid username or password - can not validate",
@@ -126,10 +130,10 @@ public class ActionsTest {
 
 	@Test
 	public void test_PrepAction_Query() throws ResponseFormatException {
-		BaseAction action = new PrepAction("3.0", "user", "password", 100,
+		BaseAction action = new PrepAction("user", "password", 100,
 				"file.tar");
-		assertEquals(
-				"Version=3.0&User=user&Code=password&Action=PREP&ID=100&File=file.tar",
+		assertEquals("Version=" + BaseAction.API_VERSION
+				+ "&User=user&Code=password&Action=PREP&ID=100&File=file.tar",
 				action.buildQuery());
 
 		// handle Analyzing case
@@ -154,7 +158,7 @@ public class ActionsTest {
 
 	@Test
 	public void test_PrepAction_Error() throws ResponseFormatException {
-		BaseAction action = new PrepAction("3.0", "user", "password", 100,
+		BaseAction action = new PrepAction("user", "password", 100,
 				"file.tar");
 		action.processResponse("{\"Action\":\"PREP\",\"Error\":3,\"Message\":\"Invalid username or password - can not validate\",\"Location\":\"\"}");
 
@@ -165,10 +169,12 @@ public class ActionsTest {
 
 	@Test
 	public void test_RunAction_Query() throws ResponseFormatException {
-		BaseAction action = new RunAction("3.0", "user", "password",
-				"job-123", "RTO-24", "file.tar", null);
+		BaseAction action = new RunAction("user", "password", "job-123",
+				"RTO-24", "file.tar", null);
 		assertEquals(
-				"Version=3.0&User=user&Code=password&Action=RUN&Job=job-123&RTO=RTO-24&InputFile=file.tar",
+				"Version="
+						+ BaseAction.API_VERSION
+						+ "&User=user&Code=password&Action=RUN&Job=job-123&RTO=RTO-24&InputFile=file.tar",
 				action.buildQuery());
 
 		action.processResponse(RunAction.EXAMPLE_RESPONSE_1);
@@ -179,8 +185,8 @@ public class ActionsTest {
 
 	@Test
 	public void test_RunAction_Error() throws ResponseFormatException {
-		BaseAction action = new RunAction("3.0", "user", "password",
-				"job-123", "RTO-24", "file.tar", null);
+		BaseAction action = new RunAction("user", "password", "job-123",
+				"RTO-24", "file.tar", null);
 		action.processResponse("{\"Action\":\"RUN\",\"Error\":3,\"Message\":\"Invalid username or password - can not validate\",\"Location\":\"\"}");
 
 		assertEquals("Invalid username or password - can not validate",
@@ -190,10 +196,9 @@ public class ActionsTest {
 
 	@Test
 	public void test_StatusAction_Query() throws ResponseFormatException, ParseException {
-		BaseAction action = new StatusAction("3.0", "user", "password",
-				"job-123");
-		assertEquals(
-				"Version=3.0&User=user&Code=password&Action=STATUS&Job=job-123",
+		BaseAction action = new StatusAction("user", "password", "job-123");
+		assertEquals("Version=" + BaseAction.API_VERSION
+				+ "&User=user&Code=password&Action=STATUS&Job=job-123",
 				action.buildQuery());
 
 		action.processResponse(StatusAction.EXAMPLE_RESPONSE_1);
@@ -239,8 +244,7 @@ public class ActionsTest {
 
 	@Test
 	public void test_StatusAction_Error() throws ResponseFormatException {
-		BaseAction action = new StatusAction("3.0", "user", "password",
-				"job-123");
+		BaseAction action = new StatusAction("user", "password", "job-123");
 		action.processResponse("{\"Action\":\"STATUS\",\"Error\":3,\"Message\":\"Invalid username or password - can not validate\",\"Location\":\"\"}");
 
 		assertEquals("Invalid username or password - can not validate",
@@ -249,10 +253,9 @@ public class ActionsTest {
 
 	@Test
 	public void test_DeleteAction_Query() throws ResponseFormatException, ParseException {
-		BaseAction action = new DeleteAction("3.0", "user", "password",
-				"job-123");
-		assertEquals(
-				"Version=3.0&User=user&Code=password&Action=DELETE&Job=job-123",
+		BaseAction action = new DeleteAction("user", "password", "job-123");
+		assertEquals("Version=" + BaseAction.API_VERSION
+				+ "&User=user&Code=password&Action=DELETE&Job=job-123",
 				action.buildQuery());
 
 		action.processResponse(DELETE_RESPONSE_1);
@@ -268,8 +271,7 @@ public class ActionsTest {
 
 	@Test
 	public void test_DeleteAction_Error() throws ResponseFormatException {
-		BaseAction action = new DeleteAction("3.0", "user", "password",
-				"job-123");
+		BaseAction action = new DeleteAction("user", "password", "job-123");
 		String response = BaseAction.ERROR_CREDENTIALS.replace("ACTION",
 				"DELETE");
 		action.processResponse(response);

@@ -7,8 +7,8 @@ public class SftpAction extends BaseAction {
 
 	private int projectID;
 
-	public SftpAction(String versionOfApi, String user, String code, int projectID) {
-		super(versionOfApi, user, code);
+	public SftpAction(String user, String code, int projectID) {
+		super(user, code);
 
 		this.projectID = projectID;
 	}

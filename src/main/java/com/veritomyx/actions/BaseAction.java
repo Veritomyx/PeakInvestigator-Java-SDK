@@ -9,6 +9,10 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
 public abstract class BaseAction {
+	private static final int API_MAJOR_VERSION = 4;
+	private static final int API_MINOR_VERSION = 0;
+	public static final String API_VERSION = API_MAJOR_VERSION + "." + API_MINOR_VERSION;
+
 	private static final String DATE_FORMAT = "yyyy-MM-dd kk:mm:ss";
 
 	/** Test Strings */
@@ -23,6 +27,10 @@ public abstract class BaseAction {
 	protected String code = null;
 
 	protected JSONObject responseObject = null;
+
+	BaseAction(String user, String code) {
+		this(API_VERSION, user, code);
+	}
 
 	BaseAction(String versionOfApi, String user, String code) {
 		this.versionOfApi = versionOfApi;

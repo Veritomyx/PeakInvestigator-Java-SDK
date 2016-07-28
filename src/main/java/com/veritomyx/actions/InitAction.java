@@ -35,12 +35,11 @@ public class InitAction extends BaseAction {
 
 	private HashMap<String, ResponseTimeCosts> estimatedCosts = null;
 
-	private InitAction(String versionOfApi, String user, String code, int ID,
-			String versionOfPi, int scanCount, int maxPoints, int minMass,
-			int maxMass, int startMass, int endMass, int calibrationCount,
-			String clientKey) {
+	private InitAction(String user, String code, int ID, String versionOfPi,
+			int scanCount, int maxPoints, int minMass, int maxMass,
+			int startMass, int endMass, int calibrationCount, String clientKey) {
 
-		super(versionOfApi, user, code);
+		super(user, code);
 
 		this.ID = ID;
 		this.versionOfPi = versionOfPi;
@@ -54,41 +53,40 @@ public class InitAction extends BaseAction {
 		this.clientKey = clientKey;
 	}
 
-	public static InitAction create(String versionOfApi, String user, String code, String clientKey) {
-		return new InitAction(versionOfApi, user, code, 0, null, 0, 0, 0, 0, 0, 0, 0, clientKey);
+	public static InitAction create(String user, String code, String clientKey) {
+		return new InitAction(user, code, 0, null, 0, 0, 0, 0, 0, 0, 0, clientKey);
 	}
 
 	public InitAction withPiVersion(String versionOfPi) {
-		return new InitAction(this.versionOfApi, this.user, this.code, this.ID,
-				versionOfPi, this.scanCount, this.maxPoints, this.minMass,
-				this.maxMass, this.startMass, this.endMass,
-				this.calibrationCount, this.clientKey);
-	}
-
-	public InitAction withMassRange(int min, int max, int start, int end) {
-		return new InitAction(this.versionOfApi, this.user, this.code, this.ID,
-				this.versionOfPi, this.scanCount, this.maxPoints, min, max,
-				start, end, this.calibrationCount, this.clientKey);
-	}
-
-	public InitAction withScanCount(int scanCount, int calibrationCount) {
-		return new InitAction(this.versionOfApi, this.user, this.code, this.ID,
-				this.versionOfPi, scanCount, this.maxPoints, this.minMass,
-				this.maxMass, this.startMass, this.endMass, calibrationCount,
+		return new InitAction(this.user, this.code, this.ID, versionOfPi,
+				this.scanCount, this.maxPoints, this.minMass, this.maxMass,
+				this.startMass, this.endMass, this.calibrationCount,
 				this.clientKey);
 	}
 
-	public InitAction withNumberOfPoints(int numberOfPoints) {
-		return new InitAction(this.versionOfApi, this.user, this.code, this.ID,
-				this.versionOfPi, this.scanCount, numberOfPoints, this.minMass,
-				this.maxMass, this.startMass, this.endMass,
+	public InitAction withMassRange(int min, int max, int start, int end) {
+		return new InitAction(this.user, this.code, this.ID, this.versionOfPi,
+				this.scanCount, this.maxPoints, min, max, start, end,
 				this.calibrationCount, this.clientKey);
 	}
 
+	public InitAction withScanCount(int scanCount, int calibrationCount) {
+		return new InitAction(this.user, this.code, this.ID, this.versionOfPi,
+				scanCount, this.maxPoints, this.minMass, this.maxMass,
+				this.startMass, this.endMass, calibrationCount, this.clientKey);
+	}
+
+	public InitAction withNumberOfPoints(int numberOfPoints) {
+		return new InitAction(this.user, this.code, this.ID, this.versionOfPi,
+				this.scanCount, numberOfPoints, this.minMass, this.maxMass,
+				this.startMass, this.endMass, this.calibrationCount,
+				this.clientKey);
+	}
+
 	public InitAction usingProjectId(int projectID) {
-		return new InitAction(this.versionOfApi, this.user, this.code,
-				projectID, this.versionOfPi, this.scanCount, this.maxPoints,
-				this.minMass, this.maxMass, this.startMass, this.endMass,
+		return new InitAction(this.user, this.code, projectID,
+				this.versionOfPi, this.scanCount, this.maxPoints, this.minMass,
+				this.maxMass, this.startMass, this.endMass,
 				this.calibrationCount, this.clientKey);
 	}
 

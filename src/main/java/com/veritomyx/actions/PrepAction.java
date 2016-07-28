@@ -9,8 +9,8 @@ public class PrepAction extends BaseAction {
 	private int projectID;
 	private String filename;
 	
-	public PrepAction(String versionOfApi, String user, String code, int projectID, String filename) {
-		super(versionOfApi, user, code);
+	public PrepAction(String user, String code, int projectID, String filename) {
+		super(user, code);
 		
 		this.projectID = projectID;
 		this.filename = filename;
