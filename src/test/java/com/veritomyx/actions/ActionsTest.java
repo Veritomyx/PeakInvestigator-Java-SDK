@@ -10,6 +10,7 @@ import org.junit.Test;
 
 import com.veritomyx.actions.BaseAction.ResponseFormatException;
 import com.veritomyx.actions.InitAction.ResponseTimeCosts;
+import com.veritomyx.actions.SftpAction.SftpFingerprints;
 
 public class ActionsTest {
 
@@ -112,10 +113,24 @@ public class ActionsTest {
 
 		SftpAction temp = (SftpAction) action;
 		assertEquals("peakinvestigator.veritomyx.com", temp.getHost());
-		assertEquals("V504", temp.getSftpUsername());
-		assertEquals("cB34lxCH0anR952gu", temp.getSftpPassword());
+		assertEquals("Vt504", temp.getSftpUsername());
+		assertEquals("0UtnWMvzoi2jF4BQ", temp.getSftpPassword());
 		assertEquals(22022, temp.getPort());
 		assertEquals("/files", temp.getDirectory());
+
+		SftpFingerprints fingerprints = temp.getFingerprints();
+		assertEquals("96:bd:da:62:5a:53:1a:2f:82:87:65:7f:c0:45:71:94",
+				fingerprints.getHash("DSA-MD5"));
+		assertEquals("b9SOs40umHMywBa2GtdsOhr/wgP1L6nfXWugjRrJTaM",
+				fingerprints.getHash("DSA-SHA256"));
+		assertEquals("5c:6f:c7:c7:79:c0:76:90:4d:3a:a1:7a:81:0e:0a:57",
+				fingerprints.getHash("ECDSA-MD5"));
+		assertEquals("d2HXgeUSmWN+gq+9V7Wad5xWaCxk+mh45F81K951MCU",
+				fingerprints.getHash("ECDSA-SHA256"));
+		assertEquals("d2:be:b8:2e:3c:be:84:e4:a3:0a:c8:42:5c:6b:39:4e",
+				fingerprints.getHash("RSA-MD5"));
+		assertEquals("QBsg8ejj4gZun4AWd4WBTJw89ftcLR9x/dZoG223srg",
+				fingerprints.getHash("RSA-SHA256"));
 	}
 
 	@Test
