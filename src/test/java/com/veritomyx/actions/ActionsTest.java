@@ -46,12 +46,12 @@ public class ActionsTest {
 
 	@Test
 	public void test_InitAction_Query() throws ResponseFormatException {
-		BaseAction action = InitAction.create("3.0", "user", "password")
-				.withMassRange(50, 100).usingProjectId(100)
+		BaseAction action = InitAction.create("3.0", "user", "password", "SDK_test")
+				.withMassRange(50, 100, 60, 80).usingProjectId(100)
 				.withPiVersion("1.2").withScanCount(5, 0)
 				.withNumberOfPoints(12345);
 
-		assertEquals("Version=3.0&User=user&Code=password&Action=INIT&ID=100&PI_Version=1.2&ScanCount=5&MaxPoints=12345&MinMass=50&MaxMass=100&CalibrationCount=0",
+		assertEquals("Version=3.0&User=user&Code=password&Action=INIT&ID=100&PI_Version=1.2&ScanCount=5&MaxPoints=12345&MinMass=50&MaxMass=100&StartMass=60&EndMass=80&CalibrationCount=0&ClientKey=SDK_test",
 				action.buildQuery());
 
 		action.processResponse(InitAction.EXAMPLE_RESPONSE_1);
@@ -85,8 +85,8 @@ public class ActionsTest {
 
 	@Test
 	public void test_InitAction_Error() throws ResponseFormatException {
-		BaseAction action = InitAction.create("3.0", "user", "password")
-				.withMassRange(50, 100).usingProjectId(100)
+		BaseAction action = InitAction.create("3.0", "user", "password", "SDK test")
+				.withMassRange(50, 100, 60, 80).usingProjectId(100)
 				.withPiVersion("1.2").withScanCount(5, 0)
 				.withNumberOfPoints(12345);
 

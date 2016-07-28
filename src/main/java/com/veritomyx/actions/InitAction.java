@@ -28,12 +28,18 @@ public class InitAction extends BaseAction {
 	private int maxPoints;
 	private int minMass;
 	private int maxMass;
+	private int startMass;
+	private int endMass;
 	private int calibrationCount;
+	private String clientKey;
 
 	private HashMap<String, ResponseTimeCosts> estimatedCosts = null;
 
-	private InitAction(String versionOfApi, String user, String code, int ID, String versionOfPi, int scanCount,
-			int maxPoints, int minMass, int maxMass, int calibrationCount) {
+	private InitAction(String versionOfApi, String user, String code, int ID,
+			String versionOfPi, int scanCount, int maxPoints, int minMass,
+			int maxMass, int startMass, int endMass, int calibrationCount,
+			String clientKey) {
+
 		super(versionOfApi, user, code);
 
 		this.ID = ID;
@@ -42,39 +48,48 @@ public class InitAction extends BaseAction {
 		this.maxPoints = maxPoints;
 		this.minMass = minMass;
 		this.maxMass = maxMass;
+		this.startMass = startMass;
+		this.endMass = endMass;
 		this.calibrationCount = calibrationCount;
+		this.clientKey = clientKey;
 	}
 
-	public static InitAction create(String versionOfApi, String user, String code) {
-		return new InitAction(versionOfApi, user, code, 0, null, 0, 0, 0, 0, 0);
+	public static InitAction create(String versionOfApi, String user, String code, String clientKey) {
+		return new InitAction(versionOfApi, user, code, 0, null, 0, 0, 0, 0, 0, 0, 0, clientKey);
 	}
 
 	public InitAction withPiVersion(String versionOfPi) {
 		return new InitAction(this.versionOfApi, this.user, this.code, this.ID,
-				versionOfPi, this.scanCount, this.maxPoints, this.minMass, this.maxMass,
-				this.calibrationCount);
+				versionOfPi, this.scanCount, this.maxPoints, this.minMass,
+				this.maxMass, this.startMass, this.endMass,
+				this.calibrationCount, this.clientKey);
 	}
 
-	public InitAction withMassRange(int min, int max) {
-		return new InitAction(this.versionOfApi, this.user, this.code, this.ID, this.versionOfPi,
-				this.scanCount, this.maxPoints, min, max, this.calibrationCount);
+	public InitAction withMassRange(int min, int max, int start, int end) {
+		return new InitAction(this.versionOfApi, this.user, this.code, this.ID,
+				this.versionOfPi, this.scanCount, this.maxPoints, min, max,
+				start, end, this.calibrationCount, this.clientKey);
 	}
 
 	public InitAction withScanCount(int scanCount, int calibrationCount) {
-		return new InitAction(this.versionOfApi, this.user, this.code, this.ID, this.versionOfPi,
-				scanCount, this.maxPoints, this.minMass, this.maxMass, calibrationCount);
+		return new InitAction(this.versionOfApi, this.user, this.code, this.ID,
+				this.versionOfPi, scanCount, this.maxPoints, this.minMass,
+				this.maxMass, this.startMass, this.endMass, calibrationCount,
+				this.clientKey);
 	}
 
 	public InitAction withNumberOfPoints(int numberOfPoints) {
 		return new InitAction(this.versionOfApi, this.user, this.code, this.ID,
 				this.versionOfPi, this.scanCount, numberOfPoints, this.minMass,
-				this.maxMass, this.calibrationCount);
+				this.maxMass, this.startMass, this.endMass,
+				this.calibrationCount, this.clientKey);
 	}
 
 	public InitAction usingProjectId(int projectID) {
-		return new InitAction(this.versionOfApi, this.user, this.code, projectID,
-				this.versionOfPi, this.scanCount, this.maxPoints, this.minMass,
-				this.maxMass, this.calibrationCount);
+		return new InitAction(this.versionOfApi, this.user, this.code,
+				projectID, this.versionOfPi, this.scanCount, this.maxPoints,
+				this.minMass, this.maxMass, this.startMass, this.endMass,
+				this.calibrationCount, this.clientKey);
 	}
 
 	public String buildQuery() {
@@ -87,7 +102,10 @@ public class InitAction extends BaseAction {
 		builder.append("MaxPoints=" + maxPoints + "&");
 		builder.append("MinMass=" + minMass + "&");
 		builder.append("MaxMass=" + maxMass + "&");
-		builder.append("CalibrationCount=" + calibrationCount);
+		builder.append("StartMass=" + startMass + "&");
+		builder.append("EndMass=" + endMass + "&");
+		builder.append("CalibrationCount=" + calibrationCount + "&");
+		builder.append("ClientKey=" + clientKey);
 
 		return builder.toString();
 	}
