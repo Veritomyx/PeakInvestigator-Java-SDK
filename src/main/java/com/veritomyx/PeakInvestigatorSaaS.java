@@ -29,16 +29,17 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.SocketTimeoutException;
 import java.net.UnknownHostException;
-
 import java.util.logging.Logger;
 
 import com.jcraft.jsch.ChannelSftp;
+import com.jcraft.jsch.HostKey;
 import com.jcraft.jsch.JSch;
 import com.jcraft.jsch.JSchException;
 import com.jcraft.jsch.SftpException;
 import com.jcraft.jsch.Session;
 import com.jcraft.jsch.SftpProgressMonitor;
 import com.veritomyx.actions.*;
+import com.veritomyx.actions.SftpAction.SftpFingerprints;
 
 /**
  * This is the main class to access the PeakInvestigator service. It has
@@ -124,7 +125,7 @@ public class PeakInvestigatorSaaS
 		log = Logger.getLogger(this.getClass().getName());
 		log.info(this.getClass().getName());
 
-		setupKnownHosts();
+		JSch.setConfig("StrictHostKeyChecking", "no");
 	}
 
 	/**
@@ -137,22 +138,6 @@ public class PeakInvestigatorSaaS
 	public PeakInvestigatorSaaS withTimeout(int timeout) {
 		this.timeout = timeout;
 		return this;
-	}
-
-	/**
-	 * Sets the known hosts for SSH sessions.
-	 * 
-	 * @throws JSchException
-	 *             Hosts file is not found.
-	 */
-	protected void setupKnownHosts() throws JSchException {
-		InputStream stream = getClass().getResourceAsStream(
-				HOST_FILE);
-		if (stream == null) {
-			throw new JSchException("Unable to locate hosts file.");
-		}
-
-		jsch.setKnownHosts(stream);
 	}
 
 	/**
@@ -270,18 +255,33 @@ public class PeakInvestigatorSaaS
 	 *            Self-explanatory.
 	 * @param port
 	 *            Self-explanatory.
+	 * @param fingerprint
+	 *            A MD5 fingerprint used to verify identity of host.
 	 * @throws JSchException
 	 *             A JSchException is thrown if problem connecting to SFTP
 	 *             server.
 	 */
 	protected void initializeSftpSession(String server, String username,
-			String password, int port) throws JSchException {
+			String password, int port, String fingerprint) throws JSchException {
 
 		log.info("Starting SFTP connection to " + server);
 
 		session = jsch.getSession(username, server, port);
 		session.setPassword(password);
 		session.connect(timeout);
+
+		HostKey hostKey = session.getHostKey();
+		if (!hostKey.getFingerPrint(jsch).equalsIgnoreCase(fingerprint)) {
+			session.disconnect();
+			StringBuilder builder = new StringBuilder();
+			builder.append("Server identity is not correct. ");
+			builder.append("Expected '");
+			builder.append(fingerprint);
+			builder.append("' but got '");
+			builder.append(hostKey.getFingerPrint(jsch));
+			builder.append("'.");
+			throw new JSchException(builder.toString());
+		}
 
 		channel = (ChannelSftp) session.openChannel("sftp");
 		channel.connect(timeout);
@@ -341,7 +341,8 @@ public class PeakInvestigatorSaaS
 				+ ":" + remoteFilename);
 
 		initializeSftpSession(action.getHost(), action.getSftpUsername(),
-				action.getSftpPassword(), action.getPort());
+				action.getSftpPassword(), action.getPort(), action
+						.getFingerprints().getHash("RSA-MD5"));
 
 		try {
 			channel.put(localFilename, remoteFilename, monitor);
@@ -383,7 +384,8 @@ public class PeakInvestigatorSaaS
 				+ action.getHost() + ":" + remoteFilename);
 
 		initializeSftpSession(action.getHost(), action.getSftpUsername(),
-				action.getSftpPassword(), action.getPort());
+				action.getSftpPassword(), action.getPort(), action
+						.getFingerprints().getHash("RSA-MD5"));
 
 		try {
 			channel.get(remoteFilename, localFilename, monitor);
