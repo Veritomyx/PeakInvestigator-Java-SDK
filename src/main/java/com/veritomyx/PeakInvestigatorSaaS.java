@@ -21,7 +21,6 @@ package com.veritomyx;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.BufferedWriter;
@@ -39,7 +38,6 @@ import com.jcraft.jsch.SftpException;
 import com.jcraft.jsch.Session;
 import com.jcraft.jsch.SftpProgressMonitor;
 import com.veritomyx.actions.*;
-import com.veritomyx.actions.SftpAction.SftpFingerprints;
 
 /**
  * This is the main class to access the PeakInvestigator service. It has
@@ -53,7 +51,6 @@ public class PeakInvestigatorSaaS
 {
 	public static final String API_VERSION = "3.3";
 	private static final String PAGE_ENCODING = "UTF-8";
-	private static final String HOST_FILE = "/com/veritomyx/sftp-servers.txt";
 
 	JSch jsch = new JSch();
 	private String server = null;
