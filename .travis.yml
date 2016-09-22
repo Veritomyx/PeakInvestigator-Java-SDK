@@ -5,3 +5,4 @@ jdk:
   - oraclejdk8
   - openjdk7
 
+script: mvn test
