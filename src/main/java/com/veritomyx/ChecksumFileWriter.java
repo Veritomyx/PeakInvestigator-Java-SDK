@@ -9,15 +9,13 @@ import java.nio.file.Path;
 
 /**
  * Used for writing files with checksum that follows the <a
- * href="https://peakinvestigator.veritomyx.com">guidelines for
+ * href="https://peakinvestigator.veritomyx.com/api">guidelines for
  * PeakInvestigator</a>.
  * 
  * <p>
  * A {@link java.io.FileWriter} wrapped by a {@link java.io.BufferedWriter} is
  * used.
  * </p>
- *
- * @see https://peakinvestigator.veritomyx.com/api/#FileFormat
  */
 public class ChecksumFileWriter {
 
@@ -43,7 +41,9 @@ public class ChecksumFileWriter {
 	 * {@link #writeln(String msg)} instead.
 	 * 
 	 * @param msg
-	 *            String to be written.
+	 *            String to be written
+	 * @throws IOException
+	 *             If there is a problem writing to the file
 	 */
 	public void write(String msg) throws IOException {
 		bufferedWriter.write(msg);
@@ -65,6 +65,8 @@ public class ChecksumFileWriter {
 	 * 
 	 * @param msg
 	 *            String to be written.
+	 * @throws IOException
+	 *             If there is a problem writing to the file
 	 */
 	public void writeln(String msg) throws IOException {
 		write(msg);
