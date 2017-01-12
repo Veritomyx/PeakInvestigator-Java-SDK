@@ -5,7 +5,7 @@
 	<groupId>com.veritomyx</groupId>
 	<artifactId>peakinvestigator-sdk</artifactId>
 	<name>PeakInvestigator Java SDK</name>
-	<version>4.0</version>
+	<version>5.1</version>
 	<description>PeakInvestigator™ is advanced centroiding and deconvolution software services for mass spectrometry. This library provides an object-oriented interface to its public API.</description>
 	<url>https://peakinvestigator.veritomyx.com/api</url>
 
