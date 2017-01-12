@@ -9,8 +9,8 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
 public abstract class BaseAction {
-	private static final int API_MAJOR_VERSION = 4;
-	private static final int API_MINOR_VERSION = 0;
+	private static final int API_MAJOR_VERSION = 5;
+	private static final int API_MINOR_VERSION = 1;
 	public static final String API_VERSION = API_MAJOR_VERSION + "." + API_MINOR_VERSION;
 
 	private static final String DATE_FORMAT = "yyyy-MM-dd kk:mm:ss";

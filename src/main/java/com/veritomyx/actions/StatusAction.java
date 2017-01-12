@@ -2,12 +2,15 @@ package com.veritomyx.actions;
 
 import java.text.ParseException;
 import java.util.Date;
+import java.util.HashMap;
+
+import org.json.simple.JSONObject;
 
 public class StatusAction extends BaseAction {
 	private static final String action = "STATUS";
 
 	public final static String EXAMPLE_RESPONSE_1 = "{\"Action\":\"STATUS\",\"Job\":\"P-504.5148\",\"Status\":\"Running\",\"Datetime\":\"2016-02-03 18:25:09\"}";
-	public final static String EXAMPLE_RESPONSE_2 = "{\"Action\":\"STATUS\",\"Job\":\"P-504.5148\",\"Status\":\"Done\",\"Datetime\":\"2016-02-03 18:31:05\",\"ScansInput\":3,\"ScansComplete\":3,\"ActualCost\":0.36,\"JobLogFile\":\"\\/files\\/P-504.5148\\/P-504.5148.log.txt\",\"ResultsFile\":\"\\/files\\/P-504.5148\\/P-504.5148.mass_list.tar\"}";
+	public final static String EXAMPLE_RESPONSE_2 = "{\"Action\":\"STATUS\", \"Job\":\"P-504.5148\", \"Status\":\"Done\", \"Datetime\":\"2016-02-03 18:31:05\", \"ScansInput\":3, \"ScansComplete\":3, \"ActualCost\":0.36, \"ResultFiles\":[\"Log\",\"MassList\"], \"ResultFilePaths\":{\"Log\":\"\\/files\\/P-504.5148\\/P-504.5148.log.txt\", \"MassList\":\"\\/files\\/P-504.5148\\/P-504.5148.mass_list.tar\"}}";
 	public final static String EXAMPLE_RESPONSE_3 = "{\"Action\":\"STATUS\",\"Job\":\"P-504.1463\",\"Status\":\"Deleted\",\"Datetime\":\"2016-02-03 18:36:05\"}";
 
 	public final static String PREPARING_STRING = "Pre-run data checking in progress. Please try again later.";
@@ -16,6 +19,7 @@ public class StatusAction extends BaseAction {
 	public final static String DELETED_STRING = "Remote job has been deleted.";
 
 	private String jobID;
+	private ResultFilePaths resultFilePaths = null;
 
 	public StatusAction(String user, String code, String jobID) {
 		super(user, code);
@@ -68,14 +72,28 @@ public class StatusAction extends BaseAction {
 		return getDoubleAttribute("ActualCost");
 	}
 
-	public String getLogFilename() {
+	public ResultFilePaths getResultFilePaths() {
+		if (resultFilePaths != null) {
+			return resultFilePaths;
+		}
+
 		preCheck();
-		return getStringAttribute("JobLogFile");
+		resultFilePaths = new ResultFilePaths();
+
+		JSONObject jsonObject = (JSONObject) responseObject.get("ResultFilePaths");
+		for (Object key : jsonObject.keySet()) {
+			resultFilePaths.put((String) key, (String) jsonObject.get(key));
+		}
+
+		return resultFilePaths;
+	}
+
+	public String getLogFilename() {
+		return getResultFilePaths().get("Log");
 	}
 
 	public String getResultsFilename() {
-		preCheck();
-		return getStringAttribute("ResultsFile");
+		return getResultFilePaths().get("MassList");
 	}
 
 	public String getMessage() {
@@ -107,4 +125,16 @@ public class StatusAction extends BaseAction {
 	}
 
 	public enum Status { Preparing, Running, Done, Deleted };
+
+	public static class ResultFilePaths extends HashMap<String, String> {
+		private static final long serialVersionUID = 6863105445323412031L;
+
+		public String[] getResultFiles() {
+			return keySet().toArray(new String[size()]);
+		}
+
+		public String getPathForResultFile(String resultFile) {
+			return get(resultFile);
+		}
+	}
 }
