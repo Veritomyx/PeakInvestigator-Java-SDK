@@ -8,7 +8,7 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
-public abstract class BaseAction {
+public abstract class BaseAction implements Action {
 	private static final int API_MAJOR_VERSION = 5;
 	private static final int API_MINOR_VERSION = 1;
 	public static final String API_VERSION = API_MAJOR_VERSION + "." + API_MINOR_VERSION;
@@ -134,24 +134,4 @@ public abstract class BaseAction {
 		return retval;
 	}
 
-	public class ResponseFormatException extends Exception {
-		private static final long serialVersionUID = 1L;
-
-		private BaseAction action = null;
-
-		public ResponseFormatException(String message, BaseAction action) {
-			super(message);
-			this.action = action;
-		}
-
-		public ResponseFormatException(String message, BaseAction action,
-				Throwable cause) {
-			super(message, cause);
-			this.action = action;
-		}
-
-		public BaseAction getAction() {
-			return action;
-		}
-	}
 }
