@@ -206,14 +206,14 @@ public class PeakInvestigatorSaaS
 	 * Execute an API call ("action") of the PeakInvestigator service.
 	 * 
 	 * @param action
-	 *            An instance of one of the subclasses of BaseAction that
-	 *            represent the API methods. It must be properly initialized.
+	 *            An instance of an Action that represent the API methods. It
+	 *            must be properly initialized.
 	 * @return The JSON response from the PeakInvestigator service.
 	 * @throws IOException
 	 *             An I/O exception is thrown if there is a problem in the HTTP
 	 *             connection.
 	 */
-	public String executeAction(BaseAction action) throws IOException {
+	public String executeAction(Action action) throws IOException {
 		action.reset();
 		String page = "https://" + server + "/api/";
 			
