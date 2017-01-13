@@ -8,7 +8,7 @@ import java.util.HashMap;
 
 import org.junit.Test;
 
-import com.veritomyx.actions.BaseAction.ResponseFormatException;
+import com.veritomyx.actions.Action.ResponseFormatException;
 import com.veritomyx.actions.InitAction.ResponseTimeCosts;
 import com.veritomyx.actions.SftpAction.SftpFingerprints;
 
@@ -89,6 +89,32 @@ public class ActionsTest {
 	}
 
 	@Test
+	public void test_InitAction_QuerySandbox() throws ResponseFormatException {
+		SandboxAction<InitAction> action = new SandboxAction<>(InitAction.create("user", "password", "SDK_test")
+				.withMassRange(50, 100, 60, 80).usingProjectId(100)
+				.withPiVersion("1.2").withScanCount(5, 0)
+				.withNumberOfPoints(12345));
+
+		assertEquals(
+				"Version="
+						+ BaseAction.API_VERSION
+						+ "&User=user&Code=password&Action=INIT&ID=100&PI_Version=1.2&ScanCount=5&MaxPoints=12345&MinMass=50&MaxMass=100&StartMass=60&EndMass=80&CalibrationCount=0&ClientKey=SDK_test&Sandbox=0",
+				action.buildQuery());
+
+		action.processResponse(InitAction.EXAMPLE_RESPONSE_1);
+
+		InitAction temp = action.getWrappedAction();
+		assertEquals("V-504.1551", temp.getJob());
+		assertEquals(504, temp.getId());
+		assertEquals(115.01, temp.getFunds(), 0);
+
+		HashMap<String, ResponseTimeCosts> costs = temp.getEstimatedCosts();
+		assertEquals(27.60, costs.get("TOF").getCost("RTO-24"), 0);
+		assertEquals(36.22, costs.get("Orbitrap").getCost("RTO-24"), 0);
+		assertEquals(32.59, costs.get("IonTrap").getCost("RTO-24"), 0);
+	}
+
+	@Test
 	public void test_InitAction_Error() throws ResponseFormatException {
 		BaseAction action = InitAction.create("user", "password", "SDK test")
 				.withMassRange(50, 100, 60, 80).usingProjectId(100)
@@ -101,6 +127,20 @@ public class ActionsTest {
 		assertEquals("Invalid username or password - can not validate",
 				action.getErrorMessage());
 		assertEquals(3, action.getErrorCode());
+	}
+
+	@Test
+	public void test_InitAction_ErrorSandbox() throws ResponseFormatException {
+		SandboxAction<InitAction> action = new SandboxAction<>(InitAction.create("user", "password", "SDK_test")
+				.withMassRange(50, 100, 60, 80).usingProjectId(100)
+				.withPiVersion("1.2").withScanCount(5, 0)
+				.withNumberOfPoints(12345), 3);
+
+		assertEquals(
+				"Version="
+						+ BaseAction.API_VERSION
+						+ "&User=user&Code=password&Action=INIT&ID=100&PI_Version=1.2&ScanCount=5&MaxPoints=12345&MinMass=50&MaxMass=100&StartMass=60&EndMass=80&CalibrationCount=0&ClientKey=SDK_test&Sandbox=3",
+				action.buildQuery());
 	}
 
 	@Test
