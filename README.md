@@ -10,7 +10,7 @@ The easiest way to add this library to your project is to pull it in via Maven:
 <dependency>
   <groupId>com.veritomyx</groupId>
   <artifactId>peakinvestigator-sdk</artifactId>
-  <version>4.0</version>
+  <version>5.4</version>
 </dependency>
 ```
 
